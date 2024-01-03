@@ -17,17 +17,32 @@
         display: grid;
         grid-template-columns: auto auto auto;
     }
+
+    .top
+    {
+        display: grid;
+        grid-template-columns: auto auto;
+    }
 </style>
 </head>
 <body>
-    <div class="edit-form"></div>
+    <div class="top">
+        <div class="edit-form"></div>
+        <div>
+        <p>Ви можете змінити таблицю відповідностей літер нажавши "update" кнопку.</p>
 
+        <p>Нижче ви можете протестувати результат роботи системи транслітерації.</p>
+        <div class="test-form">
+            <textarea class="input" rows="8"></textarea>
+            <div><button class="do-translit-form">translit</button></div>
+            <textarea class="output" rows="8"></textarea>
+        </div>
+        </div>
+    </div>
+    <p>&nbsp;</p>
     <button class="update-form">update</button>
-    <div class="test-form">
-        <textarea class="input" rows="8"></textarea>
-        <div><button class="do-translit-form">translit</button></div>
-        <textarea class="output" rows="8"></textarea>
-    </div>    
+    <p>&nbsp;</p>
+    
 </body>
 </html>
 <script>
@@ -44,4 +59,7 @@
         let from = document.querySelector(".input")
         document.querySelector(".output").value = ut.translit(from.value)
     })
+
+    ut.translitElement(document.querySelectorAll("p")[0])
+    ut.translitElement(document.querySelectorAll("p")[1])
 </script>
