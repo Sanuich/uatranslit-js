@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+
+<title>Українська Кирилицею</title>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="js/Uatranslit.js"></script>
+<style>
+    input {
+        font-size: 1em;
+    }
+
+    .test-form
+    {
+        display: grid;
+        grid-template-columns: auto auto auto;
+    }
+</style>
+</head>
+<body>
+    <div class="edit-form"></div>
+
+    <button class="update-form">update</button>
+    <div class="test-form">
+        <textarea class="input" rows="8"></textarea>
+        <div><button class="do-translit-form">translit</button></div>
+        <textarea class="output" rows="8"></textarea>
+    </div>    
+</body>
+</html>
+<script>
+    let ut = new Uatranslit()
+    ut.renderEditForm(document.querySelector(".edit-form"))
+
+    let bupdate = document.querySelector('.update-form')
+    bupdate.addEventListener("click", (event) => {
+        ut.updateForm()
+    })
+
+    let btranslit = document.querySelector('.do-translit-form')
+    btranslit.addEventListener("click", (event) => {
+        let from = document.querySelector(".input")
+        document.querySelector(".output").value = ut.translit(from.value)
+    })
+</script>

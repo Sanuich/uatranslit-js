@@ -1,17 +1,3 @@
-# uatranslit-js
-JS Object (library) that provides transliteration of Ukrainian language
-
-# How to use
-```
-let ut = new Uatranslit()
-let translittedText =  ua.translit(originalUkrainianText)
-```
-
-## How to translit a websites
-
-Open Developers Toolbar.
-Switch to console tab and paste the code
-```
 var Uatranslit = function()
 {
     this.charmap = {
@@ -129,8 +115,13 @@ var Uatranslit = function()
         el.innerHTML = this.translit(el.innerHTML)
     }
 
-    this.renderTable = function()
+    this.renderTable = function(el = null)
     {
+        if(el == undefined || el == null)
+        {
+            el = document.body
+        }
+
         let t = document.createElement("div")
         t.style.display = "inline-grid"
         t.style.gridTemplateColumns = "auto auto"
@@ -168,20 +159,94 @@ var Uatranslit = function()
 
         t.appendChild(c1)
         t.appendChild(c2)
-        document.body.innerHTML = ""
-        document.body.appendChild(t)
+        el.innerHTML = ""
+        el.appendChild(t)
     }
 
-    for(const[ua, t] of Object.entries(this.charmapFull)) {
-        if(ua !=="`" && ua !== "'")
-            this.charmapFull[ua.toUpperCase()] = this.toUppercase(t)
+    this.renderEditForm = function(el = null)
+    {
+        if(el == undefined || el == null)
+        {
+            el = document.body
+        }
+
+        let t = document.createElement("div")
+        t.style.display = "inline-grid"
+        t.style.gridTemplateColumns = "auto auto"
+        t.style.fontSize = "2em"
+
+        let c1 = document.createElement("div")
+        c1.style.display = "inline-grid"
+        c1.style.gridTemplateColumns = "auto auto auto"
+        let c2 = document.createElement("div")
+        c2.style.display = "inline-grid"
+        c2.style.gridTemplateColumns = "auto auto auto"
+
+        let i=0
+        for(const[ua, t] of Object.entries(this.charmap)) {
+            let d1 = document.createElement("div")
+            d1.innerText = ua
+
+            let di = document.createElement("div")
+            di.innerText = ">"
+
+            let d2 = document.createElement("input")
+            d2.type = "text"
+            d2.setAttribute('size', '2')
+            d2.setAttribute('lid', i)
+            d2.classList.add('letter')
+            d2.classList.add('lid-'+i)
+            d2.value = t
+            if(i<17)
+            {
+                c1.appendChild(d1)
+                c1.appendChild(di)
+                c1.appendChild(d2)
+            } else {
+                c2.appendChild(d1)
+                c2.appendChild(di)
+                c2.appendChild(d2)
+            }
+            i++
+        }
+
+        t.appendChild(c1)
+        t.appendChild(c2)
+        el.innerHTML = ""
+        el.appendChild(t)
     }
+
+    this.updateForm = function()
+    {
+        let i = 0
+        for(const[ua, t] of Object.entries(this.charmap))
+        {
+            let le = document.querySelector('.lid-' + i)
+            console.log(le.value)
+            this.charmap[ua] = le.value
+            i++
+        }
+
+        this.refresh()
+    }
+
+    this.refresh = function()
+    {
+        this.charmapFull = Ocopy(this.charmap)
+
+        for(const[ua, t] of Object.entries(this.charmapFull)) {
+            if(ua !=="`" && ua !== "'")
+                this.charmapFull[ua.toUpperCase()] = this.toUppercase(t)
+        }
+    }
+
+    this.refresh()
+
+    
 
 }
 
-let ut = new Uatranslit()
-
-ut.translitElement(document.body)
-```
-
-The whole website content will be translitted
+let Ocopy = function(obj, type)
+{
+	if(type==undefined || type==1) return JSON.parse(JSON.stringify(obj));
+}
